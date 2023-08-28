@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'user_management',
     'task_management',
+
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +131,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Auth Model
 AUTH_USER_MODEL = 'user_management.Employee'
+
+# DRF Settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}

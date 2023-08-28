@@ -15,6 +15,7 @@ class EmployeeAdmin(UserAdmin):
     list_display = ['username', 'email', 'is_active', 'is_staff']
     ordering = ['date_created']
     inlines = [ProfileInline]
+    actions = ['activation_action']
 
     fieldsets = [
         (None, {'fields': ('username', 'email')}),
@@ -26,6 +27,10 @@ class EmployeeAdmin(UserAdmin):
             'fields': ('username', 'email', 'password1', 'password2')}),
         ('Permissions', {'fields': ('is_active', 'is_staff')})
     ]
+
+    def activation_action(self, request, queryset):
+        queryset.update(is_active=True)
+    activation_action.short_description = "Active selected employees"
 
 
 admin.site.unregister(Group)

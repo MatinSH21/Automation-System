@@ -28,7 +28,6 @@ class EmployeeManager(BaseUserManager):
         return self.create_user(username, email, password, **other_fields)
 
 
-
 class Employee(AbstractBaseUser, PermissionsMixin):
 
     username = models.CharField(_('username'), max_length=30, unique=True)
@@ -47,7 +46,7 @@ class Employee(AbstractBaseUser, PermissionsMixin):
 
 class Profile(models.Model):
 
-    GENDER_CHOICES= (
+    GENDER_CHOICES = (
         ('M', 'Male'),
         ('F', 'Female'),
         ('O', 'Other')
