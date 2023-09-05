@@ -54,7 +54,7 @@ class Profile(models.Model):
 
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE, related_name='profile')
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
     gender = models.CharField(_('gender'), max_length=1, choices=GENDER_CHOICES, blank=True)
     birth_date = models.DateField(_('birth date'), blank=True, null=True)
     phone_number = models.CharField(_('phone number'), max_length=15, blank=True)
