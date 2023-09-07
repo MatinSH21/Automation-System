@@ -17,6 +17,14 @@ class EmployeeRegistrationSerializer(serializers.ModelSerializer):
         return employee
 
 
+class EmployeeSerializer(serializers.ModelSerializer):
+    # roles = serializers.StringRelatedField(read_only=True)
+
+    class Meta:
+        model = Employee
+        fields = ['id', 'username', 'email', 'date_created', 'roles']
+
+
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
@@ -24,6 +32,8 @@ class RoleSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    employee = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = Profile
         fields = '__all__'

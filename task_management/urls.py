@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from task_management import views as task_views
 
 urlpatterns = [

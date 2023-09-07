@@ -2,6 +2,10 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, User
 
+from .validators import validate_phone_number
+
+from PIL import Image
+
 
 class EmployeeManager(BaseUserManager):
 
@@ -57,13 +61,24 @@ class Profile(models.Model):
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     gender = models.CharField(_('gender'), max_length=1, choices=GENDER_CHOICES, blank=True)
     birth_date = models.DateField(_('birth date'), blank=True, null=True)
-    phone_number = models.CharField(_('phone number'), max_length=15, blank=True)
+    phone_number = models.CharField(
+        _('phone number'), max_length=11,
+        validators=[validate_phone_number], blank=True)
     address = models.TextField(_('address'), blank=True)
-    picture = models.ImageField(_('picture'), upload_to='employee_pictures', default='default.jpg')
+    picture = models.ImageField(_('picture'), upload_to='employee_pictures', default='employee_default_pic.jpg')
     date_updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.employee.username}'s profile"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        image = Image.open(self.picture.path)
+        if image.height > 300 or image.width > 300:
+            output_size = (300, 300)
+            image.thumbnail(output_size)
+            image.save(self.picture.path)
 
     class Meta:
         db_table = 'user_management_profile'
