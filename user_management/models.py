@@ -2,7 +2,7 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, User
 
-from .validators import validate_phone_number
+from .validators import validate_phone_number, validate_birth_date
 
 from PIL import Image
 
@@ -39,7 +39,7 @@ class Employee(AbstractBaseUser, PermissionsMixin):
     date_created = models.DateTimeField(_('created date'), auto_now_add=True)
     is_active = models.BooleanField(_('is active'), default=False)
     is_staff = models.BooleanField(_('is staff'), default=False)
-    roles = models.ManyToManyField('Role', symmetrical=False, related_name='employees', blank=True)
+    role = models.ForeignKey('Role', related_name='employees', blank=True, null=True, on_delete=models.SET_NULL)
 
     objects = EmployeeManager()
 
@@ -60,7 +60,7 @@ class Profile(models.Model):
     first_name = models.CharField(_('first name'), max_length=30, blank=True)
     last_name = models.CharField(_('last name'), max_length=30, blank=True)
     gender = models.CharField(_('gender'), max_length=1, choices=GENDER_CHOICES, blank=True)
-    birth_date = models.DateField(_('birth date'), blank=True, null=True)
+    birth_date = models.DateField(_('birth date'), blank=True, null=True, validators=[validate_birth_date])
     phone_number = models.CharField(
         _('phone number'), max_length=11,
         validators=[validate_phone_number], blank=True)

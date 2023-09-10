@@ -1,0 +1,63 @@
+#todo:
+    Note:
+        - Logout logic does work but its status code and message isn't correct and needed to be fixed
+        - I need to set author of Task to the person that is logged in instead of adding it by user
+        - set a good time for simple jwt config
+        - add log out or blocklist if we needed
+        - when we log in and we get token, if we log in again, last token wouldn't revoke itself and user has 2 tokens
+        or more base on how much he logs in
+        - make a decision whether I should tell user that extra fields that they are sending in their request aren't
+        included in our model or not Task views, put method (because of security stuffs)
+        - make sure that media url is secure for document and sending files for employees because without any custom
+        logic, user can use that url to access that media
+        - Keep in mind that I created a command and I have to add it to the steps in order to use this project for
+        README.py
+    --------------------------------------------------------------------------------------------------------------------
+    What I have to do:
+        - Create these models: Employee, Role, Permission, Task, Message, Report, Document
+        - Create API for Role and Permissions
+        - Add details of APIs at the end of project in API Documentation
+        - Complete user_management app
+        - Add change password for employee and possibly username or email
+        - Learn about how to upload a picture through my API and how should i handle it in backened in my Profile APIs
+        - make sure that validation for username and email and password work and test them
+        - add the logic that first user that is created, get superuser role
+    --------------------------------------------------------------------------------------------------------------------
+    What I was doing:
+        - I was working on implementing the permission and roles but i had a problem that i couldn't understand how it
+        is going to work, for example first i didn't why should have permission model when i can use their role as
+        permission, for example if IsManager, he would access to a view
+        - Secondly, i didn't know why am i creating these roles, i mean i didn't know where to use it
+        - Actually now i have an idea, i can use their permission to see if they have create_task permission, and the
+        method is post, there would be the change or something
+        https://chat.openai.com/share/01edf4dc-7558-4f0e-8a4a-273c91f57bd1
+    --------------------------------------------------------------------------------------------------------------------
+        What I have done:
+        - Give basic structure to project
+        - Create user_management app
+        - Create user_management app's models
+        - Register them to admin page
+        - Create task_management app
+        - Create Task model
+        - Register Task model to admin page
+        - Creating Profile each time we create a user with signals
+        - Install DRF
+        - Create serializer for Employee, Profile, Role, Permission models
+        - Create register, login and logout logics
+        - Create Task API and CRUD operation
+        - Create Swagger for my APIs
+        - Implement token base authentication and JTW and refresh token
+        - I made the author of task be the logged-in user
+        - I made only the user to see their only tasks
+        - I made logics that when user try to update some fields like author and some fields that shouldn't change, give
+        and error and tell user which fields are not allowed for task update logic
+        - I made logics that if user tries to send fields that aren't in our task model, raise an error and tell user,
+        which fields aren't in our model
+        - I set different error message for each scenario of put validation
+        - I added logic that only author of a task can delete the task
+        - I added those logics for extra fields and not allowed fields that I implemented in put method, for creating
+        Task object too
+        - I created APIs for Profile
+        - Adding MEDIA URL and ROOT
+        - I created a custom command for creating administrator role and permissions
+        - create permissions.py for custom roles

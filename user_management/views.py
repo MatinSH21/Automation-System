@@ -1,7 +1,7 @@
-from rest_framework.views import APIView, Http404
+from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -9,7 +9,7 @@ from .serializers import EmployeeRegistrationSerializer, EmployeeSerializer, Pro
 
 
 class EmployeeRegistrationView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = []
 
     def post(self, request):
         serializer = EmployeeRegistrationSerializer(data=request.data)

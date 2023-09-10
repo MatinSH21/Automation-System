@@ -19,7 +19,7 @@ class EmployeeAdmin(UserAdmin):
 
     fieldsets = [
         (None, {'fields': ('username', 'email')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff')})
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'role')})
     ]
     add_fieldsets = [
         (None, {
