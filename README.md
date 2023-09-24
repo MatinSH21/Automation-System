@@ -43,7 +43,7 @@ Follow step-by-step instructions for setting up the project locally.
    python -m venv venv
 4. Activate the virtual environment (If you followed step #3):
     ```sh
-   venv\Scripts\activate
+   venv/Scripts/activate
 5. Install project dependencies: 
     ```sh
    pip install -r requirements.txt
