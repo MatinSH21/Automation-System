@@ -19,7 +19,7 @@ of the project. You can also assign tasks to employees.
 
 - Task Management: Create, assign, update, delete tasks for employees
 - Employee Management: Manage employee roles, permissions, and profiles
-- Authentication and Authorization: Using Utilizes a Token-based system, where employees' access is determined by their 
+- Authentication and Authorization: Utilizes a Token-based system, where employees' access is determined by their 
 roles
 
 ## Getting Started
