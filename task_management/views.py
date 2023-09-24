@@ -4,14 +4,21 @@ from rest_framework.permissions import IsAuthenticated
 
 from .models import Task
 from .serializers import TaskSerializer, TaskCreateSerializer
+from user_management.permissions import IsManager, IsAdmin
 
 
 class TaskListAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin | IsManager]
 
     def get(self, request):
         user = request.user
-        tasks = Task.objects.filter(author=user)
+        if user.role == 'admin':
+            tasks = Task.objects.all()
+        else:
+            tasks = Task.objects.filter(author=user)
+        if self.request.query_params.get('status'):
+            task_status = self.request.query_params.get('status')
+            tasks = tasks.filter(status=task_status)
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -49,6 +56,14 @@ class TaskListAPIView(APIView):
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
         if serializer.is_valid():
+
+            # Check if user has high role to create task
+            if request.user.role == "manager" and serializer.validated_data['assigned_to']:
+                for user in serializer.validated_data['assigned_to']:
+                    if user.role == 'manager' or user.role == "admin":
+                        data = {'detail': f"You don't have permission to assign task to {user.username}"}
+                        return Response(data, status=status.HTTP_403_FORBIDDEN)
+
             serializer.validated_data['author'] = request.user
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -56,7 +71,7 @@ class TaskListAPIView(APIView):
 
 
 class TaskDetailAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAdmin | IsManager]
 
     def get_object(self, pk):
         try:
@@ -66,18 +81,24 @@ class TaskDetailAPIView(APIView):
 
     def get(self, request, pk):
         task = self.get_object(pk)
-        if task.author != request.user:
-            return Response({"detail": "You don't have permission to view this task"},
-                            status=status.HTTP_403_FORBIDDEN)
+
+        # Check for role permission
+        if request.user != task.author:
+            if request.user.role != 'admin':
+                data = {'detail': "You don't have permission to view this task"}
+                return Response(data, status=status.HTTP_403_FORBIDDEN)
+
         serializer = TaskSerializer(task)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, pk):
-
         task = self.get_object(pk)
+
+        # Check for role permission
         if task.author != request.user:
-            return Response({"detail": "You don't have permission to update this task"},
-                            status=status.HTTP_403_FORBIDDEN)
+            if request.user.role != 'admin':
+                data = {'detail': "You don't have permission to update this task"}
+                return Response(data, status=status.HTTP_403_FORBIDDEN)
 
         not_allowed_fields = ['id', 'author', 'created_date', 'updated_date']
         fields_list = []
@@ -117,8 +138,23 @@ class TaskDetailAPIView(APIView):
 
     def delete(self, request, pk):
         task = self.get_object(pk)
+
+        # Check for role permission
         if task.author != request.user:
-            return Response({"detail": "You don't have permission to delete this task"},
-                            status=status.HTTP_403_FORBIDDEN)
+            if request.user.role != 'admin':
+                data = {'detail': "You don't have permission to delete this task"}
+                return Response(data, status=status.HTTP_403_FORBIDDEN)
+
         task.delete()
         return Response({"detail": "Task got deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+
+class MyTaskAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        tasks = Task.objects.filter(assigned_to=user)
+        tasks = tasks.exclude(status="completed")
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

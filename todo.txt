@@ -24,13 +24,13 @@
         - add the logic that first user that is created, get superuser role
     --------------------------------------------------------------------------------------------------------------------
     What I was doing:
-        - I was working on implementing the permission and roles but i had a problem that i couldn't understand how it
-        is going to work, for example first i didn't why should have permission model when i can use their role as
-        permission, for example if IsManager, he would access to a view
-        - Secondly, i didn't know why am i creating these roles, i mean i didn't know where to use it
-        - Actually now i have an idea, i can use their permission to see if they have create_task permission, and the
-        method is post, there would be the change or something
-        https://chat.openai.com/share/01edf4dc-7558-4f0e-8a4a-273c91f57bd1
+        - So many things had changes
+        - my goals is to implement this: only manager can create employee and set tasks for them and admin can do all
+        things
+        - I started from User app and i think i finished UserRegistration view and it works good, now i have to work on
+        employee list view and make that if user's role is admin, it shows all user no matter their role and if it is
+        manager, only shows employees
+        - stop the stopwatch of windows
     --------------------------------------------------------------------------------------------------------------------
         What I have done:
         - Give basic structure to project
@@ -61,3 +61,7 @@
         - Adding MEDIA URL and ROOT
         - I created a custom command for creating administrator role and permissions
         - create permissions.py for custom roles
+        - make only manager can assign employee role but admin can create admin and manager and employee
+        - make only manager can see user lists that has employee role but admin can see all roles
+        - make only manager can see and change employee's profile and admin can do those things for employee and manager
+        but an admin can't change admin's profile and he can only visit

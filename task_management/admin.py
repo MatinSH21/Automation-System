@@ -6,5 +6,5 @@ from .models import Task
 class TaskAdmin(admin.ModelAdmin):
 
     list_display = ['id', 'title', 'created_date', 'due_date', 'author', 'status']
-    list_filter = ['status', 'priority', ]
+    list_filter = ['status', 'priority']
     search_fields = ['title', 'description']

@@ -11,5 +11,5 @@ def validate_phone_number(value):
 
 
 def validate_birth_date(value):
-    if value <= timezone.now().date():
+    if value >= timezone.now().date():
         raise ValidationError("Enter a valid birth date")

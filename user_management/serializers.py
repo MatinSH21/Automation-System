@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Employee, Profile, Role, Permission
+from .models import Employee, Profile
 
 
 class EmployeeRegistrationSerializer(serializers.ModelSerializer):
@@ -7,7 +7,7 @@ class EmployeeRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Employee
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'password', 'role']
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -18,17 +18,10 @@ class EmployeeRegistrationSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    # roles = serializers.StringRelatedField(read_only=True)
 
     class Meta:
         model = Employee
-        fields = ['id', 'username', 'email', 'date_created', 'roles']
-
-
-class RoleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Role
-        fields = '__all__'
+        fields = ['id', 'username', 'date_created', 'role']
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -39,7 +32,10 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PermissionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Permission
-        fields = '__all__'
+class ProfileWithRoleSerializer(serializers.Serializer):
+    profile = ProfileSerializer()
+    role = serializers.StringRelatedField(source='employee.role')
+
+    def to_representation(self, instance):
+        profile_data = ProfileSerializer(instance.profile).data
+        return {'profile': profile_data, 'role': instance.role}
